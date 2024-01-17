@@ -1,4 +1,4 @@
-# RevShop from Team A
+# RevFileConverter from Team A
 
 ## Written by Arvin Shertukde, Ciaran Diep, Divya Desai, and Roman Mazzoni
 
