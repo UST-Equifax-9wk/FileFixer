@@ -1,5 +1,5 @@
 {
-  "name": "revfileconvertor-client",
+  "name": "revfileconverter-client",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

@@ -1,10 +1,10 @@
-package com.revfileconvertor;
+package com.revfileconverter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RevfileconvertorApplicationTests {
+class RevfileconverterApplicationTests {
 
 	@Test
 	void contextLoads() {

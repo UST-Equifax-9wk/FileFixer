@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "revfileconvertor-client": {
+    "revfileconverter-client": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/revfileconvertor-client",
+            "outputPath": "dist/revfileconverter-client",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -57,10 +57,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "revfileconvertor-client:build:production"
+              "buildTarget": "revfileconverter-client:build:production"
             },
             "development": {
-              "buildTarget": "revfileconvertor-client:build:development"
+              "buildTarget": "revfileconverter-client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -68,7 +68,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "revfileconvertor-client:build"
+            "buildTarget": "revfileconverter-client:build"
           }
         },
         "test": {

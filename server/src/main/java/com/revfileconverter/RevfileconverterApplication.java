@@ -1,13 +1,13 @@
-package com.revfileconvertor;
+package com.revfileconverter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RevfileconvertorApplication {
+public class RevfileconverterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RevfileconvertorApplication.class, args);
+		SpringApplication.run(RevfileconverterApplication.class, args);
 	}
 
 }

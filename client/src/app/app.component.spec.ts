@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'revfileconvertor-client' title`, () => {
+  it(`should have the 'revfileconverter-client' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('revfileconvertor-client');
+    expect(app.title).toEqual('revfileconverter-client');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, revfileconvertor-client');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, revfileconverter-client');
   });
 });
