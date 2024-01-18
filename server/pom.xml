@@ -12,7 +12,7 @@
 	<artifactId>revfileconverter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>revfileconverter</name>
-	<description>Rev File Convertor</description>
+	<description>Rev File Converter</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
