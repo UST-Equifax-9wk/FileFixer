@@ -1,0 +1,26 @@
+{
+  "manufacturer": {
+    "startpos": 1,
+    "endpos": 15
+  },
+  "model": {
+    "startpos": 16,
+    "endpos": 35
+  },
+  "color": {
+    "startpos": 36,
+    "endpos": 45
+  },
+  "state": {
+    "startpos": 46,
+    "endpos": 47
+  },
+  "licenseplate": {
+    "startpos": 48,
+    "endpos": 55
+  },
+  "year": {
+    "startpos": 56,
+    "endpos": 59
+  }
+}
