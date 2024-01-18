@@ -5,6 +5,7 @@ import com.revfileconverter.dtos.JSONRange;
 import com.revfileconverter.entities.Car;
 import com.revfileconverter.entities.Person;
 import org.json.JSONObject;
+import com.revfileconverter.repositories.PersonRepository;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
 import org.springframework.batch.item.file.transform.Range;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -23,27 +25,40 @@ import java.util.Set;
 
 @Service
 public class FileUploadService {
+    private Charset encoding;
     private FixedLengthTokenizer[] fixedLengthTokenizer;
     private final ResourceLoader resourceLoader;
+    private final PersonRepository personRepository;
 
     @Autowired//get rid of those exceptions
-    public FileUploadService(ResourceLoader resourceLoader) throws IOException {
-        fixedLengthTokenizer = new FixedLengthTokenizer[2];
+    public FileUploadService(ResourceLoader resourceLoader, PersonRepository personRepository) throws IOException {
+        this.encoding = StandardCharsets.UTF_8;
         this.resourceLoader = resourceLoader;
-        ArrayList<JSONRange> personranges = readjson("classpath:person.json");
-        Range[] ranges = new Range[personranges.size()];
-        String[] names = new String[personranges.size()];
-        for(int i = 0; i < personranges.size();i++)
+        this.personRepository = personRepository;
+        fixedLengthTokenizer = new FixedLengthTokenizer[2];
+        ArrayList<JSONRange> objectranges = readjson("classpath:person.json");
+        Range[] ranges = new Range[objectranges.size()];
+        String[] names = new String[objectranges.size()];
+        for(int i = 0; i < objectranges.size();i++)
         {
-            ranges[i] = new Range(personranges.get(i).getStartpos(),personranges.get(i).getEndpos());
-            names[i] = personranges.get(i).getName();
+            ranges[i] = new Range(objectranges.get(i).getStartpos(),objectranges.get(i).getEndpos());
+            names[i] = objectranges.get(i).getName();
         }
         fixedLengthTokenizer[0] = generateTokenizer(ranges, names);
+        objectranges = readjson("classpath:car.json");
+        ranges = new Range[objectranges.size()];
+        names = new String[objectranges.size()];
+        for(int i = 0; i < objectranges.size();i++)
+        {
+            ranges[i] = new Range(objectranges.get(i).getStartpos(),objectranges.get(i).getEndpos());
+            names[i] = objectranges.get(i).getName();
+        }
+        fixedLengthTokenizer[1] = generateTokenizer(ranges, names);
 
     }
 
     public Person parsePersonFile(MultipartFile file) throws IOException {
-        FieldSet fieldSet = fixedLengthTokenizer[0].tokenize(new String(file.getBytes(), StandardCharsets.UTF_8));
+        FieldSet fieldSet = fixedLengthTokenizer[0].tokenize(new String(file.getBytes(), encoding));
         Person person = new Person();
         //clean up by using some type of loop to store the data
         person.setFirstname(fieldSet.readString("firstname"));
@@ -55,7 +70,7 @@ public class FileUploadService {
         return person;
     }
     public Car parseCarFile(MultipartFile file) throws IOException {
-        FieldSet fieldSet = fixedLengthTokenizer[1].tokenize(new String(file.getBytes(), StandardCharsets.UTF_8));
+        FieldSet fieldSet = fixedLengthTokenizer[1].tokenize(new String(file.getBytes(), encoding));
         Car car = new Car();
         //clean up by using some type of loop to store the data
         car.setManufacturer(fieldSet.readString("manufacturer"));

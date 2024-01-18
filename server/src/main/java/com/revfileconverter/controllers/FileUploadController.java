@@ -1,5 +1,4 @@
 package com.revfileconverter.controllers;
-import com.revfileconverter.entities.Person;
 import com.revfileconverter.services.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +14,10 @@ public class FileUploadController {
     public FileUploadController(FileUploadService fileUploadService) {
         this.fileUploadService = fileUploadService;
     }
-
+    //Used object instead of a specific entity since we can potentially return different types of entities
     @PostMapping("/readFile")
-    public Person parseFile(@RequestParam("flatFile") MultipartFile file) throws IOException{
-        return fileUploadService.parsePersonFile(file);
+    public Object parseFile(@RequestParam("flatFile") MultipartFile file) throws IOException{
+        return fileUploadService.parseCarFile(file);
     }
 
 }
