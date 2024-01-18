@@ -18,7 +18,7 @@ public class FileUploadController {
 
     @PostMapping("/readFile")
     public Person parseFile(@RequestParam("flatFile") MultipartFile file) throws IOException{
-        return fileUploadService.parseFile(file);
+        return fileUploadService.parsePersonFile(file);
     }
 
 }
