@@ -26,22 +26,17 @@ public class Person {
     @Column(name = "person_id")
     private Integer personid;
     @NotNull
-    @Size(max = 15)
     @Column(name = "first_name")
     private String firstname;
     @NotNull
-    @Size(max = 15)
     @Column(name = "last_name")
     private String lastname;
     @NotNull
-    @Size(max = 10, min = 10)
     private String dob;
     @NotNull
-    @Size(max = 30)
     @Email
     private String email;
     @NotNull
-    @Size(max = 10, min = 10)
     private String phone;
     @NotNull
     private Boolean isUsCitizen;

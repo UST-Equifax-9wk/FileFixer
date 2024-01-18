@@ -1,0 +1,26 @@
+{
+  "firstname": {
+    "startpos": 1,
+    "endpos": 15
+  },
+  "lastname": {
+    "startpos": 16,
+    "endpos": 30
+  },
+  "dob": {
+    "startpos": 31,
+    "endpos": 38
+  },
+  "email": {
+    "startpos": 39,
+    "endpos": 68
+  },
+  "phone": {
+    "startpos": 69,
+    "endpos": 78
+  },
+  "isUsCitizen": {
+    "startpos": 79,
+    "endpos": 79
+  }
+}
