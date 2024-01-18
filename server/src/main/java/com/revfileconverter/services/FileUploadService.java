@@ -4,7 +4,7 @@ package com.revfileconverter.services;
 import com.revfileconverter.dtos.JSONRange;
 import com.revfileconverter.entities.Car;
 import com.revfileconverter.entities.Person;
-import org.json.*;
+import org.json.JSONObject;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
 import org.springframework.batch.item.file.transform.Range;
