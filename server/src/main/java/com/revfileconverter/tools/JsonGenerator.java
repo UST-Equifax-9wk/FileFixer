@@ -1,17 +1,12 @@
 package com.revfileconverter.tools;
-
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
-
-import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-
 public class JsonGenerator {
 
-    private static String[] keys = {"height", "width", "length"};
-    private static int[] lengths = {3, 4 ,5};
-    private static final String FILENAME = "Entity.json";
+    private static String[] keys = {"manufacturer", "model", "color","state","licenseplate","year"};
+    private static int[] lengths = {20,25,15,2,8,4};
+    private static final String FILENAME = "car2.json";
 
     public static void main(String[] args) throws IOException {
         int pos = 1;
@@ -23,10 +18,10 @@ public class JsonGenerator {
             pos += lengths[i];
             output.put(keys[i], inner);
         }
-        ObjectMapper om = new ObjectMapper();
-        File newFile = new File("classpath:" + FILENAME);
-        System.out.println(newFile.getPath());
-        om.writeValue(newFile, output);
+        try(FileWriter newFileWriter = new FileWriter("src/main/resources/" + FILENAME)) {
+            newFileWriter.write(output.toString());
+            newFileWriter.flush();
+        }
     }
 
 }
