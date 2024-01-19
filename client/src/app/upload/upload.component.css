@@ -54,3 +54,24 @@ h2 {
     margin-bottom: 20px;
     text-align: left;
 }
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.form-group select{
+    font-size: 16px;
+    height: 40px;
+    padding: 9px 8px 8px;
+    border: 1px solid rgba(35, 35, 35, 0.4);
+    color: #484848;
+    border-radius: 6px;
+    margin-bottom: 0;
+}
