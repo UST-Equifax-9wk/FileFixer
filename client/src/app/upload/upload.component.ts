@@ -17,10 +17,11 @@ export class UploadComponent {
   formData = new FormData();
   responseData = '';
   fileLayout = '';
-  options: string[] = ['Person', 'Person Long Names', 'Car'];
+  options: string[] = ['Person', 'Person Long Names', 'Car', 'Car with Long Data'];
   optionMapper: { [key: string]: string; } = {
     'Person' : 'PERSON',
     'Car' : 'CAR' ,
+    'Car with Long Data' : 'CAR2',
     'Person Long Names' : 'PERSON2'
   };
 
@@ -29,6 +30,7 @@ export class UploadComponent {
 
   onFileSelected(event: any): void {
     this.responseData = '';
+    this.formData = new FormData();
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;

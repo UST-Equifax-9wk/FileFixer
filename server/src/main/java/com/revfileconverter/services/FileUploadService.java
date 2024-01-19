@@ -4,10 +4,10 @@ package com.revfileconverter.services;
 import com.revfileconverter.dtos.JSONRange;
 import com.revfileconverter.entities.Car;
 import com.revfileconverter.entities.Person;
+import org.json.JSONObject;
 import com.revfileconverter.enums.FileLayout;
 import com.revfileconverter.repositories.CarRepository;
 import com.revfileconverter.repositories.PersonRepository;
-import org.json.*;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
 import org.springframework.batch.item.file.transform.Range;
@@ -33,7 +33,7 @@ public class FileUploadService {
     private final ResourceLoader resourceLoader;
     private final PersonRepository personRepository;
     private final CarRepository carRepository;
-    final String[] paths = {"classpath:person.json", "classpath:car.json","classpath:person2.json"};
+    final String[] paths = {"classpath:person.json","classpath:person2.json", "classpath:car.json","classpath:car2.json"};
     @Autowired
     public FileUploadService(ResourceLoader resourceLoader, PersonRepository personRepository, CarRepository carRepository) throws IOException {
         this.encoding = StandardCharsets.UTF_8;
@@ -109,7 +109,7 @@ public class FileUploadService {
         switch(fileLayout){
             case PERSON,PERSON2:
                 return parsePersonFile(file,fileLayout);
-            case CAR:
+            case CAR,CAR2:
                 return parseCarFile(file,fileLayout);
             default:
                 break;
