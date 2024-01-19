@@ -1,13 +1,14 @@
 package com.revfileconverter.controllers;
 import com.revfileconverter.enums.FileLayout;
 import com.revfileconverter.services.FileUploadService;
+import org.springframework.batch.item.file.transform.IncorrectLineLengthException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @RestController
 public class FileUploadController {
@@ -21,5 +22,9 @@ public class FileUploadController {
     public Object parseFile(@RequestParam("flatFile") MultipartFile file, @PathVariable FileLayout fileLayout) throws IOException{
         return fileUploadService.parseFile(file, fileLayout);
     }
-
+    @ExceptionHandler(IncorrectLineLengthException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> internalErrorHandler(IncorrectLineLengthException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
