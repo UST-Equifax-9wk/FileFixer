@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    line-height: 23px;
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+
+button {
+    appearance: none;
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    text-transform: uppercase;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 0;
+    background: #8046FF;
+    color: white;
+    padding: 8px 24px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.5s ease;
+}
+
+button:hover, button:focus {
+    background: #8046FF;
+}
