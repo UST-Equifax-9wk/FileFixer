@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class FileUploadController {
     private final FileUploadService fileUploadService;
     @Autowired
