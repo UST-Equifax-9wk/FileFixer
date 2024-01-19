@@ -1,0 +1,20 @@
+<div class="upload-container">
+    <div class="main">
+        <h1>Welcome to FileFixer</h1>
+        <h2>Upload Flat file to convert it into JSON</h2>
+        <div class="form-group">
+            <label>Chooese FIle Specification</label>
+            <select [(ngModel)]="fileLayout" class="form-group">
+                <option *ngFor="let option of options" [value]="option">{{ option }}</option>
+            </select>
+        </div>
+        <input type="file" (change)="onFileSelected($event)" class="input-file"/>
+        <div>
+            <button (click)="selectUploadFile()">Convert File</button>
+        </div>
+        <div class="response-data">
+            <h2 *ngIf="responseData != ''">Response Data: </h2>
+            <pre>{{responseData}}</pre>
+        </div>
+    </div>
+</div>
