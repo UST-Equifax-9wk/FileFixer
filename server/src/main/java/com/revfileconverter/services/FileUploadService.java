@@ -120,9 +120,11 @@ public class FileUploadService {
     public Object parseFile(MultipartFile file, FileLayout fileLayout) throws IOException {
         switch(fileLayout){
             case PERSON,PERSON2:
-                return parsePersonFile(file,fileLayout);
+                List<Person> people = parsePersonFile(file, fileLayout);
+                return people.size() == 1 ? people.get(0) : people;
             case CAR,CAR2:
-                return parseCarFile(file,fileLayout);
+                List<Car> cars = parseCarFile(file, fileLayout);
+                return cars.size() == 1 ? cars.get(0) : cars;
             default:
                 break;
        }
