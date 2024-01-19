@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -33,6 +34,7 @@ public class FileUploadService {
     private final ResourceLoader resourceLoader;
     private final PersonRepository personRepository;
     private final CarRepository carRepository;
+    private static final String NEWLINE = "\\r?\\n|\\r";
     final String[] paths = {"classpath:person.json","classpath:person2.json", "classpath:car.json","classpath:car2.json"};
     @Autowired
     public FileUploadService(ResourceLoader resourceLoader, PersonRepository personRepository, CarRepository carRepository) throws IOException {
@@ -82,28 +84,38 @@ public class FileUploadService {
         return ranges;
     }
 
-    public Person parsePersonFile(MultipartFile file,FileLayout fileLayout) throws IOException {
-        FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(new String(file.getBytes(), encoding));
-        Person person = new Person();
-        person.setFirstname(fieldSet.readString("firstname"));
-        person.setLastname(fieldSet.readString("lastname"));
-        person.setEmail(fieldSet.readString("email"));
-        person.setPhone(fieldSet.readString("phone"));
-        person.setDob(fieldSet.readString("dob"));
-        person.setIsUsCitizen(fieldSet.readString("isUsCitizen").equalsIgnoreCase("T")
-        || fieldSet.readString("isUsCitizen").equalsIgnoreCase("Y"));
-        return personRepository.save(person);
+    public List<Person> parsePersonFile(MultipartFile file, FileLayout fileLayout) throws IOException {
+        String[] filedata = (new String(file.getBytes(), encoding)).split(NEWLINE);
+        List<Person> outputlist = new ArrayList<>();
+        for(String line:filedata) {
+            FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(line);
+            Person person = new Person();
+            person.setFirstname(fieldSet.readString("firstname"));
+            person.setLastname(fieldSet.readString("lastname"));
+            person.setEmail(fieldSet.readString("email"));
+            person.setPhone(fieldSet.readString("phone"));
+            person.setDob(fieldSet.readString("dob"));
+            person.setIsUsCitizen(fieldSet.readString("isUsCitizen").equalsIgnoreCase("T")
+                    || fieldSet.readString("isUsCitizen").equalsIgnoreCase("Y"));
+            outputlist.add(personRepository.save(person));
+        }
+        return outputlist;
     }
-    public Car parseCarFile(MultipartFile file,FileLayout fileLayout) throws IOException {
-        FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(new String(file.getBytes(), encoding));
-        Car car = new Car();
-        car.setManufacturer(fieldSet.readString("manufacturer"));
-        car.setModel(fieldSet.readString("model"));
-        car.setColor(fieldSet.readString("color"));
-        car.setState(fieldSet.readString("state"));
-        car.setLicenseplate(fieldSet.readString("licenseplate"));
-        car.setYear(fieldSet.readString("year"));
-        return carRepository.save(car);
+    public List<Car> parseCarFile(MultipartFile file,FileLayout fileLayout) throws IOException {
+        String[] filedata = (new String(file.getBytes(), encoding)).split(NEWLINE);
+        List<Car> outputlist = new ArrayList<>();
+        for(String line:filedata) {
+            FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(line);
+            Car car = new Car();
+            car.setManufacturer(fieldSet.readString("manufacturer"));
+            car.setModel(fieldSet.readString("model"));
+            car.setColor(fieldSet.readString("color"));
+            car.setState(fieldSet.readString("state"));
+            car.setLicenseplate(fieldSet.readString("licenseplate"));
+            car.setYear(fieldSet.readString("year"));
+            outputlist.add(carRepository.save(car));
+        }
+        return outputlist;
     }
     public Object parseFile(MultipartFile file, FileLayout fileLayout) throws IOException {
         switch(fileLayout){
