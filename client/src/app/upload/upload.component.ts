@@ -28,6 +28,7 @@ export class UploadComponent {
   constructor(private http: HttpClient, private remoteService: RemoteService) {}
 
   onFileSelected(event: any): void {
+    this.responseData = '';
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
@@ -50,6 +51,17 @@ export class UploadComponent {
     })
   }
 
+  saveData() {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    var json = this.responseData,
+        blob = new Blob([json], {type: "octet/stream"}),
+        url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = this.fileName.split('.')[0] + ".json";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
 
 
 }
