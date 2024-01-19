@@ -8,8 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
@@ -22,10 +21,7 @@ public class FileUploadController {
     //Used object instead of a specific entity since we can potentially return different types of entities
     @PostMapping("/readFile/{fileLayout}")
     public Object parseFile(@RequestParam("flatFile") MultipartFile file, @PathVariable FileLayout fileLayout) throws IOException{
-        ArrayList<Object> objects = (ArrayList<Object>)fileUploadService.parseFile(file, fileLayout);
-        if (objects.size() == 1)
-            return objects.get(0);
-        return objects;
+        return fileUploadService.parseFile(file, fileLayout);
     }
     @ExceptionHandler(IncorrectLineLengthException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
