@@ -17,6 +17,7 @@ export class UploadComponent {
   formData = new FormData();
   responseData = '';
   fileLayout = '';
+  errorMessage = '';
   options: string[] = ['Person', 'Person Long Names', 'Car', 'Car with Long Data'];
   optionMapper: { [key: string]: string; } = {
     'Person' : 'PERSON',
@@ -43,12 +44,11 @@ export class UploadComponent {
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
-        console.log(data.body);
         this.responseData = JSON.stringify(data.body, null, 2);
       },
       error: (error: HttpErrorResponse) => {
-        const errorMessage = error.error.message;
-        console.log(error.error);
+        this.errorMessage = error.error;
+        console.log(this.errorMessage);
       }
     })
   }
