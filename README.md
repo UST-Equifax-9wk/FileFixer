@@ -1,4 +1,4 @@
-# RevFileConverter from Team A
+# FileFixer from Team A
 
 ## Written by Arvin Shertukde, Ciaran Diep, Divya Desai, and Roman Mazzoni
 
