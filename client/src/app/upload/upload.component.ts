@@ -43,7 +43,6 @@ export class UploadComponent {
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
-        console.log(data.body);
         this.responseData = JSON.stringify(data.body, null, 2);
       },
       error: (error: HttpErrorResponse) => {
