@@ -4,7 +4,7 @@
         <h2>Upload Flat file to convert it into JSON</h2>
         <input type="file" (change)="onFileSelected($event)" class="input-file"/>
         <div class="form-group" *ngIf="fileName">
-            <label>Chooese FIle Specification</label>
+            <label>Choose File Specifications</label>
             <select [(ngModel)]="fileLayout" class="form-group">
                 <option *ngFor="let option of options" [value]="option">{{ option }}</option>
             </select>
