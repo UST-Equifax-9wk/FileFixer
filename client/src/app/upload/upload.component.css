@@ -78,3 +78,7 @@ h2 {
 .download-btn{
     margin-top: 20px;
 }
+.error-text {
+    color: red;
+    font-weight: 500;
+}

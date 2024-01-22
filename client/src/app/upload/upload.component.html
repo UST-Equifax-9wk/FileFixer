@@ -8,6 +8,7 @@
             <select [(ngModel)]="fileLayout" class="form-group">
                 <option *ngFor="let option of options" [value]="option">{{ option }}</option>
             </select>
+            <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
         </div>
         <div>
             <button (click)="selectUploadFile()">Convert File</button>
