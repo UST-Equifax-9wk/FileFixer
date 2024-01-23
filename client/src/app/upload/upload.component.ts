@@ -42,12 +42,13 @@ export class UploadComponent {
     this.specFileName = '';
     this.fileName = '';
     this.formData = new FormData();
+    this.fileSizeError = '';
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
       this.fileSize = ( file.size / 1024 / 1024 );
-      if((this.fileSize) > 2) {
-        this.fileSizeError = 'File size must be less than 2 MB.'; 
+      if((this.fileSize) > 1) {
+        this.fileSizeError = 'File size must be less than 1 MB.'; 
       }
       this.formData.append("flatFile", file);
     } 
@@ -69,6 +70,7 @@ export class UploadComponent {
     this.responseData = '';
     this.responseText = '';
     this.errorMessage = '';
+    this.fileSizeError = '';
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
