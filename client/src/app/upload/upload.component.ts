@@ -47,8 +47,8 @@ export class UploadComponent {
     if (file) {
       this.fileName = file.name;
       this.fileSize = ( file.size / 1024 / 1024 );
-      if((this.fileSize) > 1) {
-        this.fileSizeError = 'File size must be less than 1 MB.'; 
+      if((this.fileSize) > 2) {
+        this.fileSizeError = 'File size must be less than 2 MB.'; 
       }
       this.formData.append("flatFile", file);
     } 
