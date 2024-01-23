@@ -33,4 +33,9 @@ public class FileUploadController {
     public ResponseEntity<String> internalErrorHandler(IncorrectLineLengthException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ClassCastException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> internalErrorHandler(ClassCastException e) {
+        return new ResponseEntity<>("Delimiter can only be used to denote a delimiter for a fixed file", HttpStatus.BAD_REQUEST);
+    }
 }
