@@ -23,6 +23,5 @@
     "startpos": 79,
     "endpos": 79,
     "datatype": "BOOLEAN"
-  },
-  "delimiter": "\\r?\\n|\\r"
+  }
 }

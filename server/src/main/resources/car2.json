@@ -22,6 +22,6 @@
   "manufacturer": {
     "startpos": 1,
     "endpos": 20
-  },
-  "delimiter": "\r?\n|\r"
+  }
+
 }
