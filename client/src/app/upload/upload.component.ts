@@ -42,6 +42,7 @@ export class UploadComponent {
     this.specFileName = '';
     this.fileName = '';
     this.formData = new FormData();
+    this.fileSizeError = '';
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
@@ -69,6 +70,7 @@ export class UploadComponent {
     this.responseData = '';
     this.responseText = '';
     this.errorMessage = '';
+    this.fileSizeError = '';
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
