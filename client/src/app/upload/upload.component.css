@@ -1,13 +1,10 @@
-.file-input {
-    display: none;
-}
-
 .upload-container {
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(0deg, rgba(128,70,255,1) 0%, rgba(246,241,255,1) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 80px 0;
 }
 
 .upload-container .main {
@@ -20,7 +17,7 @@
     justify-content: center;
 }
 
-input::file-selector-button{
+input::file-selector-button, .specs-btn{
     appearance: none;
     display: inline-block;
     font-size: 14px;
@@ -81,6 +78,28 @@ h2 {
 .error-text {
     color: red;
     font-weight: 500;
+}
+p span{
+    color: green;
+    font-weight: 600;
+}
+.specs-btn {
+    display: table;
+    margin-bottom: 0;
+}
+.specs-btn input[type='file'] {
+    display: none;
+}
+.specs-btn-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.specs-btn-group span {
+    padding-left: 3px;
+    font-family: initial;
+    font-size: initial;
+    color: initial;
 }
 
 @media screen and (min-width: 1200px) {
