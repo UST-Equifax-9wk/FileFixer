@@ -17,12 +17,12 @@
   },
   "phone": {
     "startpos": 69,
-    "endpos": 78,
-    "datatype": "NUMBER"
+    "endpos": 78
   },
   "isUsCitizen": {
     "startpos": 79,
     "endpos": 79,
     "datatype": "BOOLEAN"
-  }
+  },
+  "delimiter": "\\r?\\n|\\r"
 }

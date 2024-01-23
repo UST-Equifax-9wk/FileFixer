@@ -1,1 +1,27 @@
-{"color":{"startpos":46,"endpos":60},"year":{"startpos":71,"endpos":74},"model":{"startpos":21,"endpos":45},"state":{"startpos":61,"endpos":62},"licenseplate":{"startpos":63,"endpos":70},"manufacturer":{"startpos":1,"endpos":20}}
+{
+  "color": {
+    "startpos": 46,
+    "endpos": 60
+  },
+  "year": {
+    "startpos": 71,
+    "endpos": 74
+  },
+  "model": {
+    "startpos": 21,
+    "endpos": 45
+  },
+  "state": {
+    "startpos": 61,
+    "endpos": 62
+  },
+  "licenseplate": {
+    "startpos": 63,
+    "endpos": 70
+  },
+  "manufacturer": {
+    "startpos": 1,
+    "endpos": 20
+  },
+  "delimiter": "\r?\n|\r"
+}
