@@ -14,9 +14,11 @@ import { FormsModule } from '@angular/forms';
 export class UploadComponent {
 
   fileName = '';
+  fileSize = 0;
   formData = new FormData();
   responseData = '';
   fileLayout = '';
+  fileSizeError = '';
   errorMessage = '';
   options: string[] = ['Person', 'Person Long Names', 'Car', 'Car with Long Data'];
   optionMapper: { [key: string]: string; } = {
@@ -36,6 +38,11 @@ export class UploadComponent {
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
+      this.fileSize = ( file.size / 1024 / 1024 );
+      console.log('fileSize', this.fileSize);
+      if((this.fileSize) > 2) {
+        this.fileSizeError = 'File size must be less than 2 MB.'; 
+      }
       this.formData.append("flatFile", file);
     } 
   }
