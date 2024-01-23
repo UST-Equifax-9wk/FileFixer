@@ -31,6 +31,7 @@ export class UploadComponent {
 
   onFileSelected(event: any): void {
     this.responseData = '';
+    this.errorMessage = '';
     this.formData = new FormData();
     const file: File = event.target.files[0];
     if (file) {
@@ -40,7 +41,8 @@ export class UploadComponent {
   }
 
   selectUploadFile(): void {
-   
+    this.responseData = '';
+    this.errorMessage = '';
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
@@ -48,7 +50,6 @@ export class UploadComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage = error.error;
-        console.log(this.errorMessage);
       }
     })
   }
