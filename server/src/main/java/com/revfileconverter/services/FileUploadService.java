@@ -1,13 +1,13 @@
 package com.revfileconverter.services;
 
 
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.revfileconverter.dtos.JSONRange;
-import com.revfileconverter.entities.Car;
-import com.revfileconverter.entities.Person;
-import org.json.JSONObject;
+import com.revfileconverter.enums.DataTypes;
 import com.revfileconverter.enums.FileLayout;
-import com.revfileconverter.repositories.CarRepository;
-import com.revfileconverter.repositories.PersonRepository;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.batch.item.file.transform.FixedLengthTokenizer;
 import org.springframework.batch.item.file.transform.Range;
@@ -22,9 +22,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -32,17 +31,15 @@ public class FileUploadService {
     private final Charset encoding;
     private final FixedLengthTokenizer[] fixedLengthTokenizer;
     private final ResourceLoader resourceLoader;
-    private final PersonRepository personRepository;
-    private final CarRepository carRepository;
+    private final ArrayList<ArrayList<JSONRange>> rangesarray;
     private static final String NEWLINE = "\\r?\\n|\\r";
     final String[] paths = {"classpath:person.json","classpath:person2.json", "classpath:car.json","classpath:car2.json"};
     @Autowired
-    public FileUploadService(ResourceLoader resourceLoader, PersonRepository personRepository, CarRepository carRepository) throws IOException {
+    public FileUploadService(ResourceLoader resourceLoader) throws IOException {
         this.encoding = StandardCharsets.UTF_8;
         this.resourceLoader = resourceLoader;
-        this.personRepository = personRepository;
-        this.carRepository = carRepository;
-        fixedLengthTokenizer = new FixedLengthTokenizer[paths.length];
+        fixedLengthTokenizer = new FixedLengthTokenizer[paths.length + 1];//need this + 1 for the custom tokenizer
+        rangesarray = new ArrayList<>(paths.length + 1);
         for(int i = 0; i < paths.length; i++) {
            setTokenizer(paths[i], i);
         }
@@ -50,84 +47,92 @@ public class FileUploadService {
     }
     private void setTokenizer(String path, Integer j) throws IOException {
         ArrayList<JSONRange> objectranges = readjson(path);
-        Range[] ranges = new Range[objectranges.size()];
-        String[] names = new String[objectranges.size()];
-        for(int i = 0; i < objectranges.size();i++)
-        {
-            ranges[i] = new Range(objectranges.get(i).getStartpos(),objectranges.get(i).getEndpos());
-            names[i] = objectranges.get(i).getName();
-        }
-        fixedLengthTokenizer[j] = generateTokenizer(ranges, names);
-    }
-    private FixedLengthTokenizer generateTokenizer(Range[] ranges, String[] names) {
-        FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
-        tokenizer.setNames(names);
-        tokenizer.setColumns(ranges);
-        return tokenizer;
+        rangesarray.add(objectranges);
+        fixedLengthTokenizer[j] = generateTokenizer(objectranges);
     }
     private ArrayList<JSONRange> readjson(String location) throws IOException{
         Resource resource = resourceLoader.getResource(location);
         File file = resource.getFile();
         String content = new String(Files.readAllBytes(file.toPath()));
-        JSONObject jsonObject = new JSONObject(content);
-        Set<String> keys = jsonObject.keySet();
+        return setTokenizerRanges(content);
+    }
+
+    private ArrayList<JSONRange> setTokenizerRanges(String content) {
+        JsonObject userData = new Gson().fromJson(content, new TypeToken<JsonObject>() {
+        }.getType());
+        Set<String> keys = userData.keySet();
         ArrayList<JSONRange> ranges = new ArrayList<>();
         for(String name: keys)
         {
-            JSONObject positions = jsonObject.getJSONObject(name);
+            JsonObject object  = userData.getAsJsonObject(name);
             JSONRange temprange = new JSONRange();
-            temprange.setStartpos(positions.getInt("startpos"));
-            temprange.setEndpos(positions.getInt("endpos"));
+            temprange.setStartpos((object.get("startpos").getAsInt()));
+            temprange.setEndpos((object.get("endpos").getAsInt()));
+            if(object.get("datatype") != null) {
+                temprange.setDataTypes(DataTypes.valueOf(object.get("datatype").getAsString()));
+            }
+            else{
+                temprange.setDataTypes(DataTypes.STRING);//default value is string
+            }
             temprange.setName(name);
             ranges.add(temprange);
         }
         return ranges;
     }
+    private FixedLengthTokenizer generateTokenizer(ArrayList<JSONRange> ranges) {
+        Range[] fieldrange = new Range[ranges.size()];
+        String[] names = new String[ranges.size()];
+        for(int i = 0; i < ranges.size();i++)
+        {
+            fieldrange[i] = new Range(ranges.get(i).getStartpos(),ranges.get(i).getEndpos());
+            names[i] = ranges.get(i).getName();
+        }
+        FixedLengthTokenizer tokenizer = new FixedLengthTokenizer();
+        tokenizer.setNames(names);
+        tokenizer.setColumns(fieldrange);
+        return tokenizer;
+    }
+    public List<Map<String,Object>> parseFixedFile(MultipartFile file, FileLayout fileLayout, Map<String, DataTypes> dataMap) throws IOException {
+        String[] filedata = (new String(file.getBytes(), encoding)).split(NEWLINE);
+        List<Map<String,Object>> outputlist = new ArrayList<>();
+        for(String line:filedata) {
+            FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(line);
+            Map<String,Object> jsonObject = new LinkedHashMap<>();
+            for(String value : fieldSet.getNames()){
+                switch(dataMap.get(value)) {
+                    case INTEGER:
+                        jsonObject.put(value, Long.parseLong(fieldSet.readString(value)));
+                        break;
+                    case NUMBER:
+                        jsonObject.put(value, Double.parseDouble(fieldSet.readString(value)));
+                        break;
+                    case BOOLEAN:
+                        jsonObject.put(value, fieldSet.readString(value).equalsIgnoreCase("T") ||
+                                fieldSet.readString(value).equalsIgnoreCase("Y") ||
+                                fieldSet.readString(value).equals("1"));
+                        break;
+                    default:
+                        jsonObject.put(value, fieldSet.readString(value));
+                }
+            }
+            outputlist.add(jsonObject);
+        }
+        return outputlist;
+    }
 
-    public List<Person> parsePersonFile(MultipartFile file, FileLayout fileLayout) throws IOException {
-        String[] filedata = (new String(file.getBytes(), encoding)).split(NEWLINE);
-        List<Person> outputlist = new ArrayList<>();
-        for(String line:filedata) {
-            FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(line);
-            Person person = new Person();
-            person.setFirstname(fieldSet.readString("firstname"));
-            person.setLastname(fieldSet.readString("lastname"));
-            person.setEmail(fieldSet.readString("email"));
-            person.setPhone(fieldSet.readString("phone"));
-            person.setDob(fieldSet.readString("dob"));
-            person.setIsUsCitizen(fieldSet.readString("isUsCitizen").equalsIgnoreCase("T")
-                    || fieldSet.readString("isUsCitizen").equalsIgnoreCase("Y"));
-            outputlist.add(personRepository.save(person));
-        }
-        return outputlist;
-    }
-    public List<Car> parseCarFile(MultipartFile file,FileLayout fileLayout) throws IOException {
-        String[] filedata = (new String(file.getBytes(), encoding)).split(NEWLINE);
-        List<Car> outputlist = new ArrayList<>();
-        for(String line:filedata) {
-            FieldSet fieldSet = fixedLengthTokenizer[fileLayout.getValue()].tokenize(line);
-            Car car = new Car();
-            car.setManufacturer(fieldSet.readString("manufacturer"));
-            car.setModel(fieldSet.readString("model"));
-            car.setColor(fieldSet.readString("color"));
-            car.setState(fieldSet.readString("state"));
-            car.setLicenseplate(fieldSet.readString("licenseplate"));
-            car.setYear(fieldSet.readString("year"));
-            outputlist.add(carRepository.save(car));
-        }
-        return outputlist;
-    }
     public Object parseFile(MultipartFile file, FileLayout fileLayout) throws IOException {
-        switch(fileLayout){
-            case PERSON,PERSON2:
-                List<Person> people = parsePersonFile(file, fileLayout);
-                return people.size() == 1 ? people.get(0) : people;
-            case CAR,CAR2:
-                List<Car> cars = parseCarFile(file, fileLayout);
-                return cars.size() == 1 ? cars.get(0) : cars;
-            default:
-                break;
-       }
-       return null;
+        ArrayList<JSONRange> ranges = rangesarray.get(fileLayout.getValue());
+        LinkedHashMap<String, DataTypes> dataMap = ranges.stream().collect(Collectors.toMap(JSONRange::getName, JSONRange::getDataTypes, (x, y) -> y, LinkedHashMap::new));
+        List<Map<String,Object>> result = parseFixedFile(file, fileLayout,dataMap);
+        return result.size() == 1 ? result.get(0) : result;
     }
+    public Object parseFile(MultipartFile file, FileLayout fileLayout, MultipartFile specifications) throws IOException {
+        String content = new String(specifications.getBytes());
+        ArrayList<JSONRange> ranges = setTokenizerRanges(content);
+        LinkedHashMap<String, DataTypes> dataMap = ranges.stream().collect(Collectors.toMap(JSONRange::getName, JSONRange::getDataTypes, (x, y) -> y, LinkedHashMap::new));
+        fixedLengthTokenizer[fileLayout.getValue()] = generateTokenizer(ranges);
+        List<Map<String,Object>> result = parseFixedFile(file, fileLayout,dataMap);
+        return result.size() == 1 ? result.get(0) : result;
+    }
+
 }

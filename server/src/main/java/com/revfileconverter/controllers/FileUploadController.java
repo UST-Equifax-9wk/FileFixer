@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class FileUploadController {
@@ -20,7 +21,11 @@ public class FileUploadController {
     }
     //Used object instead of a specific entity since we can potentially return different types of entities
     @PostMapping("/readFile/{fileLayout}")
-    public Object parseFile(@RequestParam("flatFile") MultipartFile file, @PathVariable FileLayout fileLayout) throws IOException{
+    public Object parseFile(@RequestParam("flatFile") MultipartFile file, @RequestParam(value = "specJSON", required = false) MultipartFile specifications, @PathVariable FileLayout fileLayout) throws IOException{
+        if(specifications != null && fileLayout.name().equals("CUSTOM"))
+        {
+            return fileUploadService.parseFile(file, fileLayout, specifications);
+        }
         return fileUploadService.parseFile(file, fileLayout);
     }
     @ExceptionHandler(IncorrectLineLengthException.class)
