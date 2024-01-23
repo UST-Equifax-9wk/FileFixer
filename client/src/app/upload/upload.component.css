@@ -82,3 +82,9 @@ h2 {
     color: red;
     font-weight: 500;
 }
+
+@media screen and (min-width: 1200px) {
+    .upload-container .main {
+        width: 65%;
+    }
+}
