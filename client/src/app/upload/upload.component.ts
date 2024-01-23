@@ -46,7 +46,6 @@ export class UploadComponent {
     if (file) {
       this.fileName = file.name;
       this.fileSize = ( file.size / 1024 / 1024 );
-      console.log('fileSize', this.fileSize);
       if((this.fileSize) > 2) {
         this.fileSizeError = 'File size must be less than 2 MB.'; 
       }
@@ -59,7 +58,6 @@ export class UploadComponent {
     if (file) {
       this.specFileName = file.name;
       this.fileSize = ( file.size / 1024 / 1024 );
-      console.log('fileSize', this.fileSize);
       if((this.fileSize) > 2) {
         this.fileSizeError = 'File size must be less than 2 MB.'; 
       }
@@ -78,9 +76,7 @@ export class UploadComponent {
         let response = JSON.parse(this.responseData);
         this.count = response.length;
         if( response.length > 5) {
-          console.log("response",response);
           this.responseText = JSON.stringify(response.slice(0, 3), null, 2);
-          console.log("Too large data :" , this.count);
         } else {
           this.responseText = this.responseData;
         }
