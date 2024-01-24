@@ -72,7 +72,7 @@ Moreover, order of each field is preserved from the specification file, so in th
 
 #### Custom Delimiter
 
-If the given file contains multiple objects which are delimited by a certain substring, then a delimiter string or regex expression can also be specified with the ```delimiter``` attribute:
+If the given file contains multiple objects which are delimited by a certain substring, then a delimiter string or RegEx expression can also be specified with the ```delimiter``` attribute:
 
 ```
 {
