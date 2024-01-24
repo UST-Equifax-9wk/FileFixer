@@ -46,6 +46,6 @@ public class FileUploadController {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> internalErrorHandler(IllegalArgumentException e) {
-        return new ResponseEntity<>("Datatype not valid", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Data not valid", HttpStatus.BAD_REQUEST);
     }
 }
