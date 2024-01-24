@@ -35,53 +35,59 @@ export class UploadComponent {
 
   constructor(private http: HttpClient, private remoteService: RemoteService) {}
 
-  onFileSelected(event: any): void {
+  private resetFormData(): void {
+    this.formData = new FormData();
+    this.fileName = '';
+    this.specFileName = '';
+    this.fileSizeError = '';
+  }
+
+  private resetResponseData(): void {
     this.responseData = '';
     this.responseText = '';
     this.errorMessage = '';
-    this.specFileName = '';
-    this.fileName = '';
-    this.formData = new FormData();
-    this.fileSizeError = '';
+  }
+
+  private isFileValid(): boolean {
+    if (this.fileSize > 2) {
+      this.fileSizeError = 'File size must be less than 2 MB.';
+      return false;
+    }
+    return true;
+  }
+
+
+  onFileSelected(event: any): void {
+    this.resetResponseData();
+    this.resetFormData();
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
-      this.fileSize = ( file.size / 1024 / 1024 );
-      if((this.fileSize) > 2) {
-        this.fileSizeError = 'File size must be less than 2 MB.'; 
-      }
+      this.isFileValid();
       this.formData.append("flatFile", file);
     } 
   }
 
   onCustomSelected(event: any) {
+    this.resetResponseData();
     const file: File = event.target.files[0];
     if (file) {
       this.specFileName = file.name;
-      this.fileSize = ( file.size / 1024 / 1024 );
-      if((this.fileSize) > 2) {
-        this.fileSizeError = 'File size must be less than 2 MB.'; 
-      }
+      this.isFileValid();
       this.formData.append("specJSON", file);
     } 
   }
 
   selectUploadFile(): void {
-    this.responseData = '';
-    this.responseText = '';
-    this.errorMessage = '';
     this.fileSizeError = '';
+    this.resetResponseData();
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
         this.responseData = JSON.stringify(data.body, null, 2);
         let response = JSON.parse(this.responseData);
         this.count = response.length;
-        if( response.length > 5) {
-          this.responseText = JSON.stringify(response.slice(0, 3), null, 2);
-        } else {
-          this.responseText = this.responseData;
-        }
+        this.responseText = response.length > 5 ? JSON.stringify(response.slice(0, 3), null, 2) : this.responseData;
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage = error.error;
