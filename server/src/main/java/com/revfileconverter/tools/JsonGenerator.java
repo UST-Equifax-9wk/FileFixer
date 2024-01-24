@@ -6,10 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 public class JsonGenerator {
 
-    private static String[] keys = {"manufacturer", "model", "color","state","licenseplate","year"};
-    private static int[] lengths = {20,25,15,2,8,4};
-    private static DataTypes[] dataTypes = {DataTypes.STRING,DataTypes.STRING,DataTypes.STRING,DataTypes.STRING,DataTypes.STRING,DataTypes.INTEGER};
-    private static final String FILENAME = "car4.json";
+    private static String[] keys = {"flavor","calories","price","cheese","isVegetarian"};
+    private static int[] lengths = {30,5,6,15,1};
+    private static DataTypes[] dataTypes = {DataTypes.STRING,DataTypes.INTEGER,DataTypes.NUMBER,DataTypes.STRING,DataTypes.BOOLEAN};
+    private static final String FILENAME = "pizza.json";
     private static final String delimiter = "";
 
     public static void main(String[] args) throws IOException {
