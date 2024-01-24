@@ -28,7 +28,7 @@ export class UploadComponent {
     'Person' : 'PERSON',
     'Car' : 'CAR' ,
     'Car with Long Data' : 'CAR2',
-    'Person with Long Data' : 'PERSON2'
+    'Person with Long Data' : 'PERSON2',
     'Custom' : 'CUSTOM'
   };
 
