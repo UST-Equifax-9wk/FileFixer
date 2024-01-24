@@ -1,0 +1,33 @@
+{
+  "manufacturer": {
+    "startpos": 1,
+    "endpos": 20,
+    "datatype": "STRING"
+  },
+  "model": {
+    "startpos": 21,
+    "endpos": 45,
+    "datatype": "STRING"
+  },
+  "color": {
+    "startpos": 46,
+    "endpos": 60,
+    "datatype": "STRING"
+  },
+  "state": {
+    "startpos": 61,
+    "endpos": 62,
+    "datatype": "STRING"
+  },
+  "licenseplate": {
+    "startpos": 63,
+    "endpos": 70,
+    "datatype": "STRING"
+  },
+  "year": {
+    "startpos": 71,
+    "endpos": 74,
+    "datatype": "INTEGER"
+  },
+  "delimiter": ""
+}
