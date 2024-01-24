@@ -165,7 +165,7 @@ public class FileUploadService {
         }
         return outputlist;
     }
-
+    //parse file for one of our preset JSON specifications
     public Object parseFile(MultipartFile file, FileLayout fileLayout) throws IOException {
         setTokenizer(paths[fileLayout.getValue()], fileLayout.getValue());
         ArrayList<JSONRange> ranges = rangesarray.get(fileLayout.getValue());
@@ -174,6 +174,7 @@ public class FileUploadService {
         List<Map<String,Object>> result = parseFixedFile(file, fileLayout,dataMap,max);
         return result.size() == 1 ? result.get(0) : result;
     }
+    //overloaded parse file to be used with a custom preset
     public Object parseFile(MultipartFile file, FileLayout fileLayout, MultipartFile specifications) throws IOException {
         String content = new String(specifications.getBytes());
         ArrayList<JSONRange> ranges = setTokenizerRanges(content);

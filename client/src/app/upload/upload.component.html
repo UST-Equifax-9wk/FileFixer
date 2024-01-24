@@ -2,24 +2,32 @@
     <div class="main">
         <h1>Welcome to FileFixer</h1>
         <h2>Upload Flat file to convert it into JSON</h2>
-        <input type="file" (change)="onFileSelected($event)" class="input-file"/>
-        <p *ngIf="fileSizeError" class="error-text">{{ fileSizeError }}</p>
-        <div class="form-group" *ngIf="fileName">
+        <div class="form-group">
             <label>Choose File Specifications</label>
             <select [(ngModel)]="fileLayout" class="form-group">
                 <option *ngFor="let option of options" [value]="option">{{ option }}</option>
             </select>
             <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
         </div>
+        <input type="file" (change)="onFileSelected($event)" class="input-file"/>
+        <div *ngIf="fileLayout === 'Custom'" class="specs-btn-group">
+            <label for="specs-file" class="specs-btn">
+                Upload Specs File 
+                <input id="specs-file" type="file" (change)="onCustomSelected($event)" class="input-file"/>
+            </label>
+            <span *ngIf="specFileName">{{ specFileName }}</span>
+        </div>
+        <p *ngIf="fileSizeError" class="error-text">{{ fileSizeError }}</p>
         <div>
             <button (click)="selectUploadFile()">Convert File</button>
         </div>
         <div class="response-data">
             <div class="download-btn" *ngIf="responseData != ''">
                 <button (click)="saveData()">Download File</button>
+                <p *ngIf="count">total records processed : <span>{{ count }}</span></p>        
             </div>
-            <h2 *ngIf="responseData != ''">Response Data: </h2>            
-            <pre>{{responseData}}</pre>
+            <h2 *ngIf="responseData != ''">Response Data: </h2>    
+            <pre *ngIf="responseData != ''">{{ responseText }}</pre>
         </div>
         
     </div>

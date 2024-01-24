@@ -14,46 +14,80 @@ import { FormsModule } from '@angular/forms';
 export class UploadComponent {
 
   fileName = '';
+  specFileName = '';
   fileSize = 0;
+  count = 0;
   formData = new FormData();
   responseData = '';
+  responseText = '';
   fileLayout = '';
   fileSizeError = '';
   errorMessage = '';
-  options: string[] = ['Person', 'Person with Long Data', 'Car', 'Car with Long Data'];
+  options: string[] = ['Person', 'Person with Long Data', 'Car', 'Car with Long Data', 'Custom'];
   optionMapper: { [key: string]: string; } = {
     'Person' : 'PERSON',
     'Car' : 'CAR' ,
     'Car with Long Data' : 'CAR2',
     'Person with Long Data' : 'PERSON2'
+    'Custom' : 'CUSTOM'
   };
 
 
   constructor(private http: HttpClient, private remoteService: RemoteService) {}
 
-  onFileSelected(event: any): void {
-    this.responseData = '';
-    this.errorMessage = '';
+  private resetFormData(): void {
     this.formData = new FormData();
+    this.fileName = '';
+    this.specFileName = '';
+    this.fileSizeError = '';
+  }
+
+  private resetResponseData(): void {
+    this.responseData = '';
+    this.responseText = '';
+    this.errorMessage = '';
+  }
+
+  private isFileValid(): boolean {
+    if (this.fileSize > 2) {
+      this.fileSizeError = 'File size must be less than 2 MB.';
+      return false;
+    }
+    return true;
+  }
+
+
+  onFileSelected(event: any): void {
+    this.resetResponseData();
+    this.resetFormData();
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
-      this.fileSize = ( file.size / 1024 / 1024 );
-      console.log('fileSize', this.fileSize);
-      if((this.fileSize) > 2) {
-        this.fileSizeError = 'File size must be less than 2 MB.'; 
-      }
+      this.isFileValid();
       this.formData.append("flatFile", file);
     } 
   }
 
+  onCustomSelected(event: any) {
+    this.resetResponseData();
+    const file: File = event.target.files[0];
+    if (file) {
+      this.specFileName = file.name;
+      this.isFileValid();
+      this.formData.append("specJSON", file);
+    } 
+  }
+
   selectUploadFile(): void {
-    this.responseData = '';
-    this.errorMessage = '';
+    this.fileSizeError = '';
+    this.resetResponseData();
     this.remoteService.uploadFile(this.formData,  this.optionMapper[this.fileLayout])
     .subscribe({
       next: (data) => {
         this.responseData = JSON.stringify(data.body, null, 2);
+        let response = JSON.parse(this.responseData);
+        this.count = response.length;
+        this.responseText = response.length > 5 ? JSON.stringify(response.slice(0, 3), null, 2) : this.responseData;
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage = error.error;
