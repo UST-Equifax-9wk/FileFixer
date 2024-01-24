@@ -23,12 +23,12 @@ export class UploadComponent {
   fileLayout = '';
   fileSizeError = '';
   errorMessage = '';
-  options: string[] = ['Person', 'Person Long Names', 'Car', 'Car with Long Data', 'Custom'];
+  options: string[] = ['Person', 'Person with Long Data', 'Car', 'Car with Long Data', 'Custom'];
   optionMapper: { [key: string]: string; } = {
     'Person' : 'PERSON',
     'Car' : 'CAR' ,
     'Car with Long Data' : 'CAR2',
-    'Person Long Names' : 'PERSON2',
+    'Person with Long Data' : 'PERSON2'
     'Custom' : 'CUSTOM'
   };
 

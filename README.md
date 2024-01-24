@@ -22,17 +22,59 @@ FileFixer allows the user to upload a fixed length file alongside choosing the l
 
 The inputted fixed length file can also contain multiple objects, which FileFixer will be able to handle as long as the proper length is maintained for each entry. By default, there should be **no delimiter** between each fixed length entry.
 
-The ```Person``` file layout contains the following fields: 
-1. First name
-2. Last name
-3. Date of birth
-4. Email
-5. Phone number
-6. Citizen Status
-
-, which adheres to the project guidelines.
-
 In the event that one or more files are malformed or incompatible, then an error will be displayed on the page in red text. 
+
+### Person File Layout
+
+The two Person file layouts both specify 6 different fields in the following order:
+1. First name - string
+2. Last name - string
+3. Date of birth - string
+4. Email - string
+5. Phone number - string
+6. US Citizen Status - boolean
+
+For the ```Person``` option, the fields adhere to the following ranges of indices, inclusive. Note that the given indices are **1-indexed, instead of 0-indexed**:
+1. First name - 1-15, 15 chars
+2. Last name - 16-30, 15 chars
+3. Date of birth - 31-38, 8 chars
+4. Email - 39-68, 30 chars
+5. Phone number - 69-78, 10 chars
+6. US Citizen Status - 79-79, 1 char
+
+For the ```Person with Long Data``` option, the same fields adhere to the following ranges instead:
+1. First name - 1-20, 20 chars
+2. Last name - 21-40, 20 chars
+3. Date of birth - 41-48, 8 chars
+4. Email - 49-78, 30 chars
+5. Phone number - 79-88, 10 chars
+6. US Citizen Status - 89-89, 1 char
+
+### Car File Layouts
+
+Mostly created just as a proof of concept to show that multiple presets can be made, the two Car file layouts specify 6 different fields:
+1. Manufacturer - string
+2. Model - string
+3. Color - string
+4. US state code - string
+5. License plate number - string
+6. Year - string
+
+The ```Car``` option adheres to the following ranges:
+1. Manufacturer - 1-15, 15 chars
+2. Model - 16-35, 20 chars
+3. Color - 36-45, 10 chars
+4. US state code - 46-47, 2 chars
+5. License plate number - 48-55, 8 chars
+6. Year - 56-59, 4 chars
+
+The ```Car with Long Data``` option adheres to the following ranges:
+1. Manufacturer - 1-20, 20 chars
+2. Model - 21-45, 25 chars
+3. Color - 46-60, 15 chars
+4. US state code - 61-62, 2 chars
+5. License plate number - 63-70, 8 chars
+6. Year - 71-74, 4 chars
 
 ### Custom File Specifications
 
@@ -54,6 +96,8 @@ If the ```Custom``` file layout is chosen, then a supplementary JSON file is req
 }
 ```
 
+The positions of each character are based on a **1-indexed system**, so FileFixer will return an error if any of the given positions are less than 1. An error will also occur if any of the given start positions are greater than the corresponding end position, which would result in a backward range.
+
 The field names can be any valid JavaScript string (aside from ```delimiter```), but the strings ```startpos``` and ```endpos``` are specific attribute names and must be **exactly** correct.
 
 Each field can also contain another optional attribute for the desired data type, with the ```datatype``` attribute:
@@ -72,7 +116,7 @@ Moreover, order of each field is preserved from the specification file, so in th
 
 #### Custom Delimiter
 
-If the given file contains multiple objects which are delimited by a certain substring, then a delimiter string can also be specified with the ```delimiter``` attribute:
+If the given file contains multiple objects which are delimited by a certain substring, then a delimiter string or RegEx expression can also be specified with the ```delimiter``` attribute:
 
 ```
 {
