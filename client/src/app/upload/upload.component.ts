@@ -48,12 +48,10 @@ export class UploadComponent {
     this.errorMessage = '';
   }
 
-  private isFileValid(): boolean {
+  isFileValid() {
     if (this.fileSize > 2) {
       this.fileSizeError = 'File size must be less than 2 MB.';
-      return false;
     }
-    return true;
   }
 
 
@@ -63,6 +61,7 @@ export class UploadComponent {
     const file: File = event.target.files[0];
     if (file) {
       this.fileName = file.name;
+      this.fileSize = ( file.size / 1024 / 1024 );
       this.isFileValid();
       this.formData.append("flatFile", file);
     } 
@@ -73,6 +72,7 @@ export class UploadComponent {
     const file: File = event.target.files[0];
     if (file) {
       this.specFileName = file.name;
+      this.fileSize = ( file.size / 1024 / 1024 );
       this.isFileValid();
       this.formData.append("specJSON", file);
     } 
